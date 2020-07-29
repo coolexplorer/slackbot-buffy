@@ -1,51 +1,45 @@
 from slackeventsapi import SlackEventAdapter
 from slack import WebClient
 import os
+from model.app_mention import AppMention
+from model.message import message
+import logging
+import logging.config
 
-# Our app's Slack Event Adapter for receiving actions via the Events API
+logging.config.fileConfig(fname='log.conf', disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
+
 slack_signing_secret = os.environ["SLACK_EVENTS_TOKEN"]
 slack_events_adapter = SlackEventAdapter(slack_signing_secret, "/slack/events")
 
-# Create a SlackClient for your bot to use for Web API requests
 slack_bot_token = os.environ["SLACK_TOKEN"]
 slack_client = WebClient(slack_bot_token)
 
 
 @slack_events_adapter.on("message")
 def handle_message(event_data):
-    message = event_data["event"]
-    # If the incoming message contains "hi", then respond with a "Hello" message
-    if message.get("subtype") is None and "hi" in message.get('text'):
+    message = Message(event_data["event"])
+
+    if message.sub_type is None and "hi" in message.text:
         channel = message["channel"]
         message = "Hello <@%s>! :tada:" % message["user"]
         slack_client.chat_postMessage(channel=channel, text=message)
 
 
-# Example reaction emoji echo
-@slack_events_adapter.on("reaction_added")
-def reaction_added(event_data):
-    event = event_data["event"]
-    emoji = event["reaction"]
-    channel = event["item"]["channel"]
-    text = ":%s:" % emoji
-    slack_client.chat_postMessage(channel=channel, text=text)
-
-
 @slack_events_adapter.on("app_mention")
 def handle_mention(event_data):
-    event = event_data["event"]
-    channel = event["channel"]
-    commands = event['text'].split()
-    print(f"message {commands}")
+    app_mention = AppMention(event_data['event'])
+    commands = app_mention.parse_command()
+    logger.debug(f"message {commands}")
     text = "What can I do for you?"
-    slack_client.chat_postMessage(channel=channel, text=text)
+    slack_client.chat_postMessage(channel=app_mention.channel, text=text)
 
 
-# Error events
 @slack_events_adapter.on("error")
 def error_handler(err):
-    print("ERROR: " + str(err))
+    logger.error("ERROR: " + str(err))
 
-# Once we have our event listeners configured, we can start the
-# Flask server with the default `/events` endpoint on port 3000
-slack_events_adapter.start(host='0.0.0.0', port=3000)
+
+if __name__ == "__main__":
+    slack_events_adapter.start(host='0.0.0.0', port=3000)
+
