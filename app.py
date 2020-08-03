@@ -2,7 +2,8 @@ from slackeventsapi import SlackEventAdapter
 from slack import WebClient
 import os
 from model.app_mention import AppMention
-from model.message import message
+from model.message import Message
+from parser.command_parser import CommandParser
 import logging
 import logging.config
 
@@ -19,20 +20,21 @@ slack_client = WebClient(slack_bot_token)
 @slack_events_adapter.on("message")
 def handle_message(event_data):
     message = Message(event_data["event"])
-
-    if message.sub_type is None and "hi" in message.text:
-        channel = message["channel"]
-        message = "Hello <@%s>! :tada:" % message["user"]
-        slack_client.chat_postMessage(channel=channel, text=message)
+    commands = message.parse_message()
+    logger.debug(f"message {commands}")
+    parser = CommandParser(commands)
+    parser.parse_command()
 
 
 @slack_events_adapter.on("app_mention")
 def handle_mention(event_data):
     app_mention = AppMention(event_data['event'])
-    commands = app_mention.parse_command()
+    commands = app_mention.parse_message()
     logger.debug(f"message {commands}")
-    text = "What can I do for you?"
-    slack_client.chat_postMessage(channel=app_mention.channel, text=text)
+    parser = CommandParser(commands[1:])
+    parser.parse_command()
+    # text = "What can I do for you?"
+    # slack_client.chat_postMessage(channel=app_mention.channel, text=text)
 
 
 @slack_events_adapter.on("error")

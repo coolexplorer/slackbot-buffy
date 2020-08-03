@@ -1,0 +1,4 @@
+commands = [
+    "jira",
+    "confluence"
+]
