@@ -1,15 +1,14 @@
 import logging
-from service.jira import JiraClient
 
 logger = logging.getLogger(__name__)
 
 
 class JiraParser:
-    def __init__(self, message):
+    def __init__(self, jira, message):
+        self.jira = jira
         self.message = message
-        self.jira_client = JiraClient()
 
     def parse(self):
-        logger.debug(self.jira_client.get_projects())
+        logger.debug(self.jira.get_boards("QEAP"))
 
 

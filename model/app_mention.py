@@ -10,3 +10,6 @@ class AppMention(BaseMessage):
         self.channel = event.get('channel')
         self.event_ts = event.get('event_ts')
         self.ts = event.get('ts')
+
+    def parse_message(self):
+        return self.text.split()[1:]
