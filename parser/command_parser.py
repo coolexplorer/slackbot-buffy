@@ -1,6 +1,6 @@
 import importlib
 import logging
-from src import StringUtil
+from util.string_util import StringUtil
 from constant.command import commands
 
 logger = logging.getLogger(__name__)
