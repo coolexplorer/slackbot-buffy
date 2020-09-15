@@ -18,7 +18,8 @@ app = Flask(__name__)
 slack_bot_token = os.environ["SLACK_TOKEN"]
 slack = WebClient(slack_bot_token)
 
-service_accounts = ServiceAccounts()
+k8s_config_type = os.environ["K8S_CONFIG_TYPE"]             # ['FILE', 'IN_CLUSTER']
+service_accounts = ServiceAccounts(k8s_config=k8s_config_type)
 
 
 async def event_handler(event_type, event_data):

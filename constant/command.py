@@ -1,4 +1,4 @@
 commands = [
     "jira",
-    "confluence"
+    "k8s"
 ]
