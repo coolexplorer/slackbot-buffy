@@ -1,3 +1,3 @@
-command = [
+jira_command = [
     "log"
 ]

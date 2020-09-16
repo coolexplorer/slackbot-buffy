@@ -55,7 +55,10 @@ async def event_handler(event_type, event_data):
 def _parse_command(message, commands):
     try:
         parser = CommandParser(service_accounts, commands)
-        parser.parse_command()
+        blocks = parser.parse_command()
+        logger.debug(f"response message: {blocks}")
+
+        slack.chat_postMessage(channel=message.channel, blocks=blocks)
     except InvalidCommand as e:
         logger.error(e)
         slack.chat_postMessage(channel=message.channel, text=e)

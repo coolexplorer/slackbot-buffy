@@ -29,7 +29,10 @@ class CommandParser:
         instance.parse()
 
     def case_k8s(self):
-        pass
+        module = importlib.import_module(f'parser.{self.parser_name}')
+        class_ = getattr(module, StringUtil.snake_to_camel(self.parser_name))
+        instance = class_(self.service_accounts.k8s, self.message)
+        instance.parse()
 
     def case_default(self):
         raise Exception('Invalid command')
