@@ -20,10 +20,11 @@ app = Flask(__name__)
 
 # slack
 slack_bot_token = os.environ.get('SLACK_TOKEN', 'xoxb-3339495132-1270691607044-oXckdW4MCYu3HyTWIf4KKXhV')
-slack = WebClient(slack_bot_token)
+slack = WebClient(token=slack_bot_token, run_async=True)
 
 # buffy configuration
 config = Configuration()
+config.read_env()
 service_accounts = ServiceAccounts(config)
 
 
@@ -71,5 +72,12 @@ def event_api():
     return make_response("No match the event type.", 404, {"X-Slack-No-Retry": 1})
 
 
+@app.route("/ping", methods=["GET"])
+def health_check_api():
+    return make_response("pong", 200, {"content_type": "application/json"})
+
+
 if __name__ == '__main__':
+    logger.debug(f'Jira Configuration {config.jira}')
+    logger.debug(f'Kubernetes Configuration {config.kubernetes}')
     app.run('0.0.0.0', port=8080)

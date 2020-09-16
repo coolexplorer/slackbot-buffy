@@ -3,7 +3,7 @@ from jira import JIRA
 
 class Jira:
     def __init__(self, jira_config):
-        self.client = JIRA(jira_config.address, basic_auth=(jira_config.basic_user, jira_config.basic_pwd))
+        self.client = JIRA(jira_config.address, basic_auth=(jira_config.basic_auth_user, jira_config.basic_auth_pass))
 
     def get_projects(self):
         projects = self.client.projects()

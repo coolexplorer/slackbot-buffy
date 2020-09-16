@@ -3,16 +3,17 @@ replicaCount: 1
 namespace: "qe-tools"
 
 image:
-  repository: nginx
+  repository: coolexplorer/buffy
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.1.0"
+  tag: "dev-2ab28bc"
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-jira: {}
+jira:
+  host: "https://jaas.ea.com"
 k8s:
   configType: "IN_CLUSTER"        #['FILE', 'IN_CLUSTER']
 
@@ -39,8 +40,9 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
+  type: NodePort
   port: 8080
+  nodePort: 31180
 
 resources:
   limits:

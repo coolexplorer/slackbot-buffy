@@ -1,5 +1,8 @@
 
 class KubernetesConfig:
-    def __init__(self, config_type='FILE', config_path='~/.kube/config'):
+    def __init__(self, config_type='', config_path=''):
         self.config_type = config_type
         self.config_path = config_path
+
+    def __str__(self):
+        return f"type: {self.config_type}, path: {self.config_path}"

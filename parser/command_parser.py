@@ -28,6 +28,9 @@ class CommandParser:
         instance = class_(self.service_accounts.jira, self.message)
         instance.parse()
 
+    def case_k8s(self):
+        pass
+
     def case_default(self):
         raise Exception('Invalid command')
 

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "buffy.fullname" . }}
-  namespace: {{ Values.namespace }}
+  namespace: {{ .Values.namespace }}
   labels:
     {{- include "buffy.labels" . | nindent 4 }}
 spec:
@@ -40,14 +40,19 @@ spec:
             protocol: TCP
           env:
           - name: K8S_CONFIG
-            value: {{ Values.k8s.configType}}
+            value: {{ .Values.k8s.configType }}
+          - name: JIRA_HOST
+            value: {{ .Values.jira.host }}
+          envFrom:
+          - secretRef:
+              name: {{ include "buffy.fullname" . }}
           livenessProbe:
             httpGet:
-              path: /
+              path: /ping
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /ping
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
