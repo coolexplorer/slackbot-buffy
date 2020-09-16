@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 # slack
-slack_bot_token = os.environ.get('SLACK_TOKEN', 'xoxb-3339495132-1270691607044-oXckdW4MCYu3HyTWIf4KKXhV')
+slack_bot_token = os.environ.get('SLACK_TOKEN', '')
 slack = WebClient(token=slack_bot_token, run_async=True)
 
 # buffy configuration
