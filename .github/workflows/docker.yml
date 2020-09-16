@@ -17,7 +17,7 @@ jobs:
     - name: docker build & push
       uses: mr-smithers-excellent/docker-build-push@v2
       with:
-        image: coolexplorer/kube-consul-registrator
+        image: coolexplorer/buffy
         registry: docker.io
         dockerfile: buffy/Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
