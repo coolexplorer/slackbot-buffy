@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 # slack
 slack_bot_token = os.environ.get('SLACK_TOKEN', '')
-slack = WebClient(token=slack_bot_token, run_async=True)
+slack = WebClient(token=slack_bot_token)
 
 # buffy configuration
 config = Configuration()
