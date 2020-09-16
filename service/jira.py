@@ -2,8 +2,8 @@ from jira import JIRA
 
 
 class Jira:
-    def __init__(self):
-        self.client = JIRA('https://jaas.ea.com', basic_auth=('seunkim@ea.com', 'yeojinsihoodahee'))
+    def __init__(self, jira_config):
+        self.client = JIRA(jira_config.address, basic_auth=(jira_config.basic_user, jira_config.basic_pwd))
 
     def get_projects(self):
         projects = self.client.projects()

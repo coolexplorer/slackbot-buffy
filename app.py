@@ -2,6 +2,7 @@ import os
 import json
 from slack import WebClient
 from flask import Flask, request, make_response
+from config.cofiguration import Configuration
 from constant.event import events
 from model.app_mention import AppMention
 from model.message import Message
@@ -10,16 +11,20 @@ from service.service_accounts import ServiceAccounts
 from exception.invalid_command import InvalidCommand
 import logging.config
 
+# log
 logging.config.fileConfig(fname='log.conf', disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
+# web server
 app = Flask(__name__)
 
-slack_bot_token = os.environ["SLACK_TOKEN"]
+# slack
+slack_bot_token = os.environ.get('SLACK_TOKEN', 'xoxb-3339495132-1270691607044-oXckdW4MCYu3HyTWIf4KKXhV')
 slack = WebClient(slack_bot_token)
 
-k8s_config_type = os.environ["K8S_CONFIG_TYPE"]             # ['FILE', 'IN_CLUSTER']
-service_accounts = ServiceAccounts(k8s_config=k8s_config_type)
+# buffy configuration
+config = Configuration()
+service_accounts = ServiceAccounts(config)
 
 
 async def event_handler(event_type, event_data):
