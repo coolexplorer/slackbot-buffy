@@ -39,7 +39,7 @@ spec:
             containerPort: 8080
             protocol: TCP
           env:
-          - name: K8S_CONFIG
+          - name: K8S_CONFIG_TYPE
             value: {{ .Values.k8s.configType }}
           - name: JIRA_HOST
             value: {{ .Values.jira.host }}
