@@ -1,13 +1,13 @@
 import os
 
 from config.jira_config import JiraConfig
-from config.kubernetes_config import KubernetesConfig
+from config.k8s_config import K8SConfig
 
 
 class Configuration:
     def __init__(self):
         self.jira = JiraConfig()
-        self.kubernetes = KubernetesConfig()
+        self.kubernetes = K8SConfig()
 
     def read_env(self):
         self.jira.address = os.environ.get('JIRA_HOST', '')

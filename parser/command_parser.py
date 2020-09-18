@@ -13,12 +13,14 @@ class CommandParser:
         self.command = self.message[0].lower()
         self.parser_name = self.command + '_parser'
         self.case_name = 'case_' + self.command
-        logger.debug(f'parser_name : {self.parser_name}, case_name : {self.case_name}')
+        logger.info(f"message {message}")
+        logger.info(f'parser_name : {self.parser_name}, case_name : {self.case_name}')
 
     def parse_command(self):
         if self.command in commands:
             case = getattr(self, self.case_name, lambda: "case_default")
         else:
+            logger.info(f"{self.command}")
             raise Exception('Invalid Command')
         return case()
 
@@ -26,16 +28,17 @@ class CommandParser:
         module = importlib.import_module(f'parser.{self.parser_name}')
         class_ = getattr(module, StringUtil.snake_to_camel(self.parser_name))
         instance = class_(self.service_accounts.jira, self.message)
-        instance.parse()
+        return instance.parse()
 
     def case_k8s(self):
         module = importlib.import_module(f'parser.{self.parser_name}')
         class_ = getattr(module, StringUtil.snake_to_camel(self.parser_name))
         instance = class_(self.service_accounts.k8s, self.message)
-        instance.parse()
+        return instance.parse()
 
     def case_default(self):
-        raise Exception('Invalid command')
+        logger.error("case_default")
+        pass
 
 
 

@@ -11,3 +11,6 @@ class BaseResponse:
     def _get_markdown_block(text):
         return {"type": "section", "text": {"type": "mrkdwn", "text": text}}
 
+    @staticmethod
+    def _make_code_block(text):
+        return '```{0}```'.format(text)
