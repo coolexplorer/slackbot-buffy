@@ -32,3 +32,19 @@ class K8SParser:
     def get_pods(self):
         self._check_params()
         return self.k8s.get_pods(self.namespace)
+
+    def get_deploys(self):
+        self._check_params()
+        return self.k8s.get_deployments(self.namespace)
+
+    def get_daemons(self):
+        self._check_params()
+        return self.k8s.get_daemon_sets(self.namespace)
+
+    def get_states(self):
+        self._check_params()
+        return self.k8s.get_stateful_sets(self.namespace)
+
+    def get_replicas(self):
+        self._check_params()
+        return self.k8s.get_replica_sets(self.namespace)

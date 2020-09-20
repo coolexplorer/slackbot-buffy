@@ -3,5 +3,9 @@ k8s_commands = [
 ]
 
 k8s_sub_commands = [
-    'pods'
+    'pods',
+    'deploys',
+    'daemons',
+    'states',
+    'replicas'
 ]
