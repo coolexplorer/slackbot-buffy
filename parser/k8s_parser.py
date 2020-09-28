@@ -48,3 +48,15 @@ class K8SParser:
     def get_replicas(self):
         self._check_params()
         return self.k8s.get_replica_sets(self.namespace)
+
+    def get_ns(self):
+        self._check_params()
+        return self.k8s.get_namespaces()
+
+    def get_configmap(self):
+        self._check_params()
+        return self.k8s.get_config_map(self.namespace)
+
+    def get_secret(self):
+        self._check_params()
+        return self.k8s.get_secret(self.namespace)

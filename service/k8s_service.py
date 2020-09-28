@@ -29,7 +29,7 @@ class K8SService:
         blocks = self.k8s_response.get_k8s_response(response)
         return blocks
 
-    def get_deployments(self, namespace=None):
+    def get_deployments(self, namespace=None) -> str:
         v1 = self.client.AppsV1Api()
         res = v1.list_deployment_for_all_namespaces(watch=False)
         filtered = [x for x in res.items if x.metadata.namespace == namespace] if namespace is not None else res.items
@@ -39,7 +39,7 @@ class K8SService:
         blocks = self.k8s_response.get_k8s_response(response)
         return blocks
 
-    def get_daemon_sets(self, namespace=None):
+    def get_daemon_sets(self, namespace=None) -> str:
         v1 = self.client.AppsV1Api()
         res = v1.list_daemon_set_for_all_namespaces(watch=False)
         filtered = [x for x in res.items if x.metadata.namespace == namespace] if namespace is not None else res.items
@@ -50,7 +50,7 @@ class K8SService:
         blocks = self.k8s_response.get_k8s_response(response)
         return blocks
 
-    def get_stateful_sets(self, namespace=None):
+    def get_stateful_sets(self, namespace=None) -> str:
         v1 = self.client.AppsV1Api()
         res = v1.list_stateful_set_for_all_namespaces(watch=False)
         filtered = [x for x in res.items if x.metadata.namespace == namespace] if namespace is not None else res.items
@@ -61,7 +61,7 @@ class K8SService:
         blocks = self.k8s_response.get_k8s_response(response)
         return blocks
 
-    def get_replica_sets(self, namespace=None):
+    def get_replica_sets(self, namespace=None) -> str:
         v1 = self.client.AppsV1Api()
         res = v1.list_replica_set_for_all_namespaces(watch=False)
         filtered = [x for x in res.items if x.metadata.namespace == namespace] if namespace is not None else res.items
@@ -69,6 +69,36 @@ class K8SService:
         str_format = "{0:10}\t{1:8}\t{2:8}\t{3:8}\t{4:20}\n"
         header = ['Namespace', 'Desired', 'Current', 'Ready', 'Name']
         response = self.make_get_replica_set_response(filtered, str_format, header)
+        blocks = self.k8s_response.get_k8s_response(response)
+        return blocks
+
+    def get_namespaces(self) -> str:
+        v1 = self.client.CoreV1Api()
+        res = v1.list_namespace(watch=False)
+        str_format = "{0:10}\t{1:20}\n"
+        header = ['Status', 'Name']
+        response = self.make_get_namespace_response(res.items, str_format, header)
+        blocks = self.k8s_response.get_k8s_response(response)
+        logger.debug(res.items)
+        return blocks
+
+    def get_config_map(self, namespace=None) -> str:
+        v1 = self.client.CoreV1Api()
+        res = v1.list_config_map_for_all_namespaces(watch=False)
+        filtered = [x for x in res.items if x.metadata.namespace == namespace] if namespace is not None else res.items
+        str_format = "{0:10}\t{1:3}\t{2:20}\n"
+        header = ['Namespace', 'Data', 'Name']
+        response = self.make_get_config_map_response(filtered, str_format, header)
+        blocks = self.k8s_response.get_k8s_response(response)
+        return blocks
+
+    def get_secret(self, namespace=None) -> str:
+        v1 = self.client.CoreV1Api()
+        res = v1.list_secret_for_all_namespaces(watch=False)
+        filtered = [x for x in res.items if x.metadata.namespace == namespace] if namespace is not None else res.items
+        str_format = "{0:10}\t{1:3}\t{2:20}\n"
+        header = ['Namespace', 'Data', 'Type', 'Name']
+        response = self.make_get_secret_response(filtered, str_format, header)
         blocks = self.k8s_response.get_k8s_response(response)
         return blocks
 
@@ -184,6 +214,69 @@ class K8SService:
                     item.metadata.namespace, item.status.replicas, item.status.available_replicas,
                     item.status.ready_replicas, item.metadata.name
                 )
+
+        if len(response) == 0:
+            response.append("No data")
+
+        logger.debug(response)
+        return response
+
+    @staticmethod
+    def make_get_namespace_response(items, str_format, header):
+        header = str_format.format(*header)
+        response = []
+        block_index = -1
+
+        for i, item in enumerate(items):
+            if i % TEXT_LINE_LIMIT == 0:
+                response.append(header)
+                block_index += 1
+
+            response[block_index] += str_format.format(
+                item.status.phase, item.metadata.name
+            )
+
+        if len(response) == 0:
+            response.append("No data")
+
+        logger.debug(response)
+        return response
+
+    @staticmethod
+    def make_get_namespace_response(items, str_format, header):
+        header = str_format.format(*header)
+        response = []
+        block_index = -1
+
+        for i, item in enumerate(items):
+            if i % TEXT_LINE_LIMIT == 0:
+                response.append(header)
+                block_index += 1
+
+            response[block_index] += str_format.format(
+                item.status.phase, item.metadata.name
+            )
+
+        if len(response) == 0:
+            response.append("No data")
+
+        logger.debug(response)
+        return response
+
+    @staticmethod
+    def make_get_secret_response(items, str_format, header):
+        header = str_format.format(*header)
+        response = []
+        block_index = -1
+
+        for i, item in enumerate(items):
+            if i % TEXT_LINE_LIMIT == 0:
+                response.append(header)
+                block_index += 1
+
+            response[block_index] += str_format.format(
+                item.metadata.namespace, len(item.data), item.type, item.metadata.name
+            )
 
         if len(response) == 0:
             response.append("No data")

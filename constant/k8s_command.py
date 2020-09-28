@@ -7,5 +7,8 @@ k8s_sub_commands = [
     'deploys',
     'daemons',
     'states',
-    'replicas'
+    'replicas',
+    'ns',
+    'configmap',
+    'secret'
 ]
