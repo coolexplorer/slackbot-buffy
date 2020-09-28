@@ -46,14 +46,6 @@ spec:
           envFrom:
           - secretRef:
               name: {{ include "buffy.fullname" . }}
-          livenessProbe:
-            httpGet:
-              path: /ping
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /ping
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

@@ -6,7 +6,7 @@ image:
   repository: coolexplorer/buffy
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "dev-aca22bf"
+  tag: "dev-c14e283"
 
 imagePullSecrets: []
 nameOverride: ""

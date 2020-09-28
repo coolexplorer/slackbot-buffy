@@ -46,14 +46,11 @@ rules:
   - namespaces
   - endpoints
   verbs: ["list", "watch", "get"]
-- apiGroups: ["extensions"]
+- apiGroups: ["apps"]
   resources:
   - daemonsets
   - deployments
   - replicasets
-  verbs: ["list", "watch", "get"]
-- apiGroups: ["apps"]
-  resources:
   - statefulsets
   verbs: ["list", "watch", "get"]
 - apiGroups: ["batch"]
