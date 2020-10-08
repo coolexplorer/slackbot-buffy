@@ -22,6 +22,7 @@ class K8SParser:
         else:
             logger.error(f'Invalid Command: {self.case_name}')
             raise Exception('Invalid Command')
+        self._check_params()
         return case()
 
     def _check_params(self):
@@ -30,33 +31,28 @@ class K8SParser:
             self.namespace = self.params[index + 1]
 
     def get_pods(self):
-        self._check_params()
         return self.k8s.get_pods(self.namespace)
 
     def get_deploys(self):
-        self._check_params()
         return self.k8s.get_deployments(self.namespace)
 
     def get_daemons(self):
-        self._check_params()
         return self.k8s.get_daemon_sets(self.namespace)
 
     def get_states(self):
-        self._check_params()
         return self.k8s.get_stateful_sets(self.namespace)
 
     def get_replicas(self):
-        self._check_params()
         return self.k8s.get_replica_sets(self.namespace)
 
     def get_ns(self):
-        self._check_params()
         return self.k8s.get_namespaces()
 
     def get_configmap(self):
-        self._check_params()
         return self.k8s.get_config_map(self.namespace)
 
     def get_secret(self):
-        self._check_params()
         return self.k8s.get_secret(self.namespace)
+
+    def get_nodes(self):
+        return self.k8s.get_nodes()

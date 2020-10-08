@@ -10,5 +10,6 @@ k8s_sub_commands = [
     'replicas',
     'ns',
     'configmap',
-    'secret'
+    'secret',
+    'nodes'
 ]
