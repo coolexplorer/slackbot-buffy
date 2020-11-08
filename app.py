@@ -69,5 +69,6 @@ def _parse_command(web_client, message, commands):
 if __name__ == '__main__':
     logger.info(f'Jira Configuration {config.jira}')
     logger.info(f'Kubernetes Configuration {config.kubernetes}')
+    logger.info(f'Gitlab Configuration {config.gitlab}')
     logger.info(f'RTM Client is started....')
     rtm_client.start()

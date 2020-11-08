@@ -20,25 +20,27 @@ class CommandParser:
         if self.command in commands:
             case = getattr(self, self.case_name, lambda: "case_default")
         else:
-            logger.info(f"{self.command}")
+            logger.error(f"Wrong command : {self.command}")
             raise Exception('Invalid Command')
         return case()
 
     def case_jira(self):
-        module = importlib.import_module(f'parser.{self.parser_name}')
-        class_ = getattr(module, StringUtil.snake_to_camel(self.parser_name))
-        instance = class_(self.service_accounts.jira, self.message)
-        return instance.parse()
+        return self.get_class(self.service_accounts.jira)
 
     def case_k8s(self):
-        module = importlib.import_module(f'parser.{self.parser_name}')
-        class_ = getattr(module, StringUtil.snake_to_camel(self.parser_name))
-        instance = class_(self.service_accounts.k8s, self.message)
-        return instance.parse()
+        return self.get_class(self.service_accounts.k8s)
+
+    def case_gitlab(self):
+        return self.get_class(self.service_accounts.gitlab)
 
     def case_default(self):
-        logger.error("case_default")
+        logger.error(f"Cannot find the command. message: {self.message}, command : {self.command}")
         pass
 
+    def get_class(self, service):
+        module = importlib.import_module(f'parser.{self.parser_name}')
+        class_ = getattr(module, StringUtil.snake_to_camel(self.parser_name))
+        instance = class_(service, self.message)
+        return instance.parse()
 
 

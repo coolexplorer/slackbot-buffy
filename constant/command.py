@@ -1,4 +1,5 @@
 commands = [
     "jira",
-    "k8s"
+    "k8s",
+    "gitlab"
 ]

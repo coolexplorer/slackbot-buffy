@@ -2,7 +2,7 @@ k8s_commands = [
     'get'
 ]
 
-k8s_sub_commands = [
+k8s_get_sub_commands = [
     'pods',
     'deploys',
     'daemons',

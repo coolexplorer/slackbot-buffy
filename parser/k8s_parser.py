@@ -1,6 +1,6 @@
 import logging
 
-from constant.k8s_command import k8s_commands, k8s_sub_commands
+from constant.k8s_command import k8s_commands, k8s_get_sub_commands
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ class K8SParser:
         self.namespace = None
 
     def parse(self):
-        if self.k8s_command in k8s_commands and self.k8s_sub_command in k8s_sub_commands:
+        if self.k8s_command in k8s_commands and self.k8s_sub_command in k8s_get_sub_commands:
             case = getattr(self, self.case_name, lambda: "case_default")
         else:
             logger.error(f'Invalid Command: {self.case_name}')
