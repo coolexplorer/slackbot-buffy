@@ -11,12 +11,7 @@ class K8SResponse(BaseResponse):
         BaseResponse.__init__(self)
 
     def get_k8s_response(self, responses):
-        response = [self._get_divider_block()]
-
-        for text in responses:
-            response.append(self._get_markdown_block(self._make_code_block(text)))
-
-        return response
+        return self.get_response(responses)
 
     @staticmethod
     def make_get_pod_response(items, str_format, header):

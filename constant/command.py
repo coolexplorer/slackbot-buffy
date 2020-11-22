@@ -1,5 +1,5 @@
 commands = [
-    "jira",
-    "k8s",
-    "gitlab"
+    'jira',
+    'k8s',
+    'gitlab'
 ]

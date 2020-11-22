@@ -1,4 +1,4 @@
 events = [
-    "app_mention",
-    "message"
+    'app_mention',
+    'message'
 ]

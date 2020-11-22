@@ -11,12 +11,7 @@ class GitlabResponse(BaseResponse):
         BaseResponse.__init__(self)
 
     def get_gitlab_response(self, responses):
-        response = [self._get_divider_block()]
-
-        for text in responses:
-            response.append(self._get_markdown_block(self._make_code_block(text)))
-
-        return response
+        return self.get_response(responses)
 
     @staticmethod
     def make_get_projects_response(projects, str_format, header):
@@ -56,6 +51,18 @@ class GitlabResponse(BaseResponse):
 
         if len(response) == 0:
             response.append("No data")
+
+        logger.debug(response)
+        return response
+
+    @staticmethod
+    def make_create_pipeline_response(pipeline, str_format, header):
+        header = str_format.format(*header)
+        response = [header]
+
+        response += str_format.format(
+            pipeline.id, pipeline.status, pipeline.ref
+        )
 
         logger.debug(response)
         return response

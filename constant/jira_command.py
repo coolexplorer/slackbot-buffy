@@ -1,3 +1,3 @@
 jira_command = [
-    "log"
+    'log'
 ]

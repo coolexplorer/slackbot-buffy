@@ -3,6 +3,8 @@ import logging
 
 from kubernetes import client, config
 
+from constant.k8s_command import k8s_sub_commands, k8s_commands
+from response.help_repsponse import HelpResponse
 from response.k8s_response import K8SResponse
 
 logger = logging.getLogger(__name__)
@@ -16,6 +18,13 @@ class K8SService:
             config.load_kube_config(k8s_config.config_path)
         self.client = client
         self.k8s_response = K8SResponse()
+        self.help_response = HelpResponse()
+
+    def get_help(self):
+        response = self.help_response.get_help_template('k8s', k8s_commands, k8s_sub_commands)
+        logger.info(f"response : {response}")
+        blocks = self.help_response.get_help_response(response)
+        return blocks
 
     def get_pods(self, namespace=None) -> str:
         v1 = self.client.CoreV1Api()
